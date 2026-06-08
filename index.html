@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>De Klusspecialist van Duijn</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Source+Sans+3:wght@300;400;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --donker: #1a1a18;
+      --oranje: #e8620a;
+      --oranje-licht: #f5813a;
+      --beige: #f5f0e8;
+      --grijs: #5a5a56;
+      --wit: #ffffff;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Source Sans 3', sans-serif;
+      background: var(--wit);
+      color: var(--donker);
+      overflow-x: hidden;
+    }
+
+    /* NAV */
+    nav {
+      position: fixed; top: 0; width: 100%; z-index: 100;
+      background: rgba(26,26,24,0.96);
+      backdrop-filter: blur(8px);
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 5%;
+      height: 64px;
+    }
+    .nav-logo {
+      font-family: 'Playfair Display', serif;
+      color: var(--wit); font-size: 1.1rem; letter-spacing: 0.02em;
+    }
+    .nav-logo span { color: var(--oranje); }
+    .nav-links { display: flex; gap: 2rem; list-style: none; }
+    .nav-links a {
+      color: #ccc; text-decoration: none; font-size: 0.9rem;
+      font-weight: 300; letter-spacing: 0.06em; text-transform: uppercase;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--oranje); }
+
+    /* HERO */
+    .hero {
+      min-height: 100vh;
+      background: var(--donker);
+      display: flex; align-items: center;
+      padding: 80px 5% 60px;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse at 70% 50%, rgba(232,98,10,0.12) 0%, transparent 65%);
+    }
+    .hero-content { position: relative; z-index: 1; max-width: 620px; }
+    .hero-tag {
+      display: inline-block;
+      background: var(--oranje);
+      color: var(--wit);
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding: 5px 14px;
+      margin-bottom: 1.5rem;
+    }
+    .hero h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2.8rem, 5vw, 4.2rem);
+      color: var(--wit);
+      line-height: 1.1;
+      margin-bottom: 1.5rem;
+    }
+    .hero h1 em { color: var(--oranje); font-style: normal; }
+    .hero p {
+      color: #aaa; font-size: 1.1rem; font-weight: 300;
+      line-height: 1.7; margin-bottom: 2.5rem; max-width: 480px;
+    }
+    .hero-cta {
+      display: inline-flex; align-items: center; gap: 10px;
+      background: var(--oranje); color: var(--wit);
+      padding: 14px 30px; font-size: 0.95rem; font-weight: 600;
+      text-decoration: none; transition: background 0.2s, transform 0.2s;
+    }
+    .hero-cta:hover { background: var(--oranje-licht); transform: translateY(-2px); }
+    .hero-cta svg { width: 18px; height: 18px; }
+    .hero-stats {
+      display: flex; gap: 2.5rem; margin-top: 3.5rem;
+      padding-top: 2rem; border-top: 1px solid rgba(255,255,255,0.1);
+    }
+    .stat-num {
+      font-family: 'Playfair Display', serif;
+      font-size: 2rem; color: var(--oranje); display: block;
+    }
+    .stat-label { font-size: 0.8rem; color: #777; letter-spacing: 0.08em; text-transform: uppercase; }
+
+    /* DIENSTEN */
+    .diensten {
+      padding: 100px 5%;
+      background: var(--beige);
+    }
+    .section-header { text-align: center; margin-bottom: 60px; }
+    .section-tag {
+      font-size: 0.75rem; font-weight: 600; letter-spacing: 0.14em;
+      text-transform: uppercase; color: var(--oranje); margin-bottom: 0.75rem;
+      display: block;
+    }
+    .section-header h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2rem, 3.5vw, 2.8rem);
+      color: var(--donker);
+    }
+    .diensten-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 2px;
+    }
+    .dienst-card {
+      background: var(--wit);
+      padding: 2.5rem 2rem;
+      transition: transform 0.2s;
+      cursor: default;
+    }
+    .dienst-card:hover { transform: translateY(-4px); }
+    .dienst-icon {
+      width: 48px; height: 48px;
+      background: var(--oranje);
+      display: flex; align-items: center; justify-content: center;
+      margin-bottom: 1.25rem;
+    }
+    .dienst-icon svg { width: 24px; height: 24px; stroke: white; fill: none; stroke-width: 2; }
+    .dienst-card h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.2rem; margin-bottom: 0.75rem;
+    }
+    .dienst-card p { color: var(--grijs); font-size: 0.9rem; line-height: 1.6; font-weight: 300; }
+
+    /* PROJECTEN */
+    .projecten {
+      padding: 100px 5%;
+      background: var(--wit);
+    }
+    .projecten-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 3px;
+      margin-top: 60px;
+    }
+    .project-card {
+      position: relative; overflow: hidden;
+      aspect-ratio: 4/3;
+      background: #eee;
+      cursor: pointer;
+    }
+    .project-card img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      transition: transform 0.5s ease;
+    }
+    .project-card:hover img { transform: scale(1.06); }
+    .project-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(to top, rgba(26,26,24,0.9) 0%, transparent 60%);
+      opacity: 0; transition: opacity 0.3s;
+      display: flex; align-items: flex-end; padding: 1.5rem;
+    }
+    .project-card:hover .project-overlay { opacity: 1; }
+    .project-info h4 {
+      font-family: 'Playfair Display', serif;
+      color: var(--wit); font-size: 1.1rem; margin-bottom: 0.25rem;
+    }
+    .project-info span {
+      color: var(--oranje); font-size: 0.8rem;
+      font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase;
+    }
+    .no-projects {
+      grid-column: 1/-1; text-align: center;
+      padding: 4rem; color: var(--grijs);
+    }
+
+    /* OVER */
+    .over {
+      padding: 100px 5%;
+      background: var(--donker);
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: center;
+    }
+    .over-tekst .section-tag { color: var(--oranje); }
+    .over-tekst h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.8rem, 3vw, 2.5rem);
+      color: var(--wit); margin-bottom: 1.5rem;
+    }
+    .over-tekst p {
+      color: #999; font-size: 1rem; line-height: 1.8;
+      font-weight: 300; margin-bottom: 1rem;
+    }
+    .over-info { display: flex; flex-direction: column; gap: 1rem; margin-top: 2rem; }
+    .info-rij {
+      display: flex; align-items: center; gap: 1rem;
+      padding: 1rem 1.25rem;
+      background: rgba(255,255,255,0.04);
+      border-left: 3px solid var(--oranje);
+    }
+    .info-rij svg { width: 18px; height: 18px; stroke: var(--oranje); fill: none; stroke-width: 2; flex-shrink: 0; }
+    .info-rij span { color: #ccc; font-size: 0.95rem; }
+    .over-visual {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: 1fr 1fr;
+      gap: 3px;
+      height: 400px;
+    }
+    .over-visual div {
+      background: rgba(255,255,255,0.06);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .over-visual div:first-child {
+      grid-column: 1 / -1;
+      background: var(--oranje);
+    }
+    .over-visual div:first-child span {
+      font-family: 'Playfair Display', serif;
+      font-size: 3.5rem; color: var(--wit); font-weight: 900;
+    }
+    .over-visual .v-label {
+      font-size: 0.75rem; letter-spacing: 0.1em;
+      text-transform: uppercase; color: #666;
+    }
+
+    /* CONTACT */
+    .contact {
+      padding: 100px 5%;
+      background: var(--beige);
+    }
+    .contact-inner {
+      display: grid;
+      grid-template-columns: 1fr 1.2fr;
+      gap: 80px;
+      align-items: start;
+    }
+    .contact-info h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.8rem, 3vw, 2.5rem);
+      margin-bottom: 1rem;
+    }
+    .contact-info p { color: var(--grijs); line-height: 1.7; margin-bottom: 2rem; font-weight: 300; }
+    .contact-detail {
+      display: flex; align-items: center; gap: 1rem;
+      margin-bottom: 1rem;
+    }
+    .contact-detail svg { width: 20px; height: 20px; stroke: var(--oranje); fill: none; stroke-width: 2; }
+    .contact-detail a, .contact-detail span {
+      color: var(--donker); text-decoration: none; font-size: 1rem;
+    }
+    .contact-detail a:hover { color: var(--oranje); }
+    .contact-form { display: flex; flex-direction: column; gap: 1rem; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    .contact-form input,
+    .contact-form textarea {
+      padding: 14px 16px;
+      border: 2px solid transparent;
+      background: var(--wit);
+      font-family: 'Source Sans 3', sans-serif;
+      font-size: 0.95rem;
+      color: var(--donker);
+      outline: none;
+      transition: border-color 0.2s;
+      width: 100%;
+    }
+    .contact-form input:focus,
+    .contact-form textarea:focus { border-color: var(--oranje); }
+    .contact-form textarea { resize: vertical; min-height: 130px; }
+    .btn-verzend {
+      background: var(--oranje); color: var(--wit);
+      border: none; padding: 15px 32px;
+      font-family: 'Source Sans 3', sans-serif;
+      font-size: 0.95rem; font-weight: 600;
+      cursor: pointer; transition: background 0.2s, transform 0.2s;
+      align-self: flex-start;
+      letter-spacing: 0.04em;
+    }
+    .btn-verzend:hover { background: var(--oranje-licht); transform: translateY(-2px); }
+    .form-melding {
+      padding: 12px 16px; font-size: 0.9rem; display: none;
+    }
+    .form-melding.succes { background: #d4edda; color: #155724; display: block; }
+    .form-melding.fout { background: #f8d7da; color: #721c24; display: block; }
+
+    /* FOOTER */
+    footer {
+      background: var(--donker);
+      padding: 2rem 5%;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .footer-logo {
+      font-family: 'Playfair Display', serif;
+      color: #555; font-size: 0.95rem;
+    }
+    .footer-logo span { color: var(--oranje); }
+    footer p { color: #444; font-size: 0.8rem; }
+
+    /* RESPONSIVE */
+    @media (max-width: 768px) {
+      .over { grid-template-columns: 1fr; gap: 40px; }
+      .over-visual { display: none; }
+      .contact-inner { grid-template-columns: 1fr; gap: 40px; }
+      .form-row { grid-template-columns: 1fr; }
+      .nav-links { display: none; }
+      .hero-stats { gap: 1.5rem; }
+    }
+
+    /* ANIMATE IN */
+    .fade-in {
+      opacity: 0; transform: translateY(20px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+    .fade-in.zichtbaar { opacity: 1; transform: translateY(0); }
+  </style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo">De Klus<span>specialist</span></div>
+  <ul class="nav-links">
+    <li><a href="#diensten">Diensten</a></li>
+    <li><a href="#projecten">Projecten</a></li>
+    <li><a href="#over">Over ons</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-content fade-in">
+    <div class="hero-tag">Zuid-Holland</div>
+    <h1>Vakmanschap dat <em>spreekt</em> voor zich</h1>
+    <p>Van badkamer tot tuin — Piet van Duijn lost elk klus op met precisie, eerlijkheid en jarenlange ervaring.</p>
+    <a href="#contact" class="hero-cta">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81a19.79 19.79 0 01-3.07-8.7A2 2 0 012 .18h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 14.92z"/></svg>
+      Neem contact op
+    </a>
+    <div class="hero-stats">
+      <div>
+        <span class="stat-num">15+</span>
+        <span class="stat-label">Jaar ervaring</span>
+      </div>
+      <div>
+        <span class="stat-num">100%</span>
+        <span class="stat-label">Klanttevredenheid</span>
+      </div>
+      <div>
+        <span class="stat-num">Z-H</span>
+        <span class="stat-label">Regio</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- DIENSTEN -->
+<section class="diensten" id="diensten">
+  <div class="section-header fade-in">
+    <span class="section-tag">Wat we doen</span>
+    <h2>Onze diensten</h2>
+  </div>
+  <div class="diensten-grid">
+    <div class="dienst-card fade-in">
+      <div class="dienst-icon">
+        <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      </div>
+      <h3>Badkamer & Toilet</h3>
+      <p>Complete badkamers en toiletruimtes van A tot Z. Tegelen, loodgieterswerk, alles inbegrepen.</p>
+    </div>
+    <div class="dienst-card fade-in">
+      <div class="dienst-icon">
+        <svg viewBox="0 0 24 24"><path d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z"/></svg>
+      </div>
+      <h3>Reparaties & Onderhoud</h3>
+      <p>Kleine en grote reparaties snel opgelost. Geen klus te klein, geen probleem te groot.</p>
+    </div>
+    <div class="dienst-card fade-in">
+      <div class="dienst-icon">
+        <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
+      </div>
+      <h3>Tegelen & Vloeren</h3>
+      <p>Wand- en vloertegels, laminaat of PVC — strak gelegd met oog voor detail.</p>
+    </div>
+    <div class="dienst-card fade-in">
+      <div class="dienst-icon">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
+      </div>
+      <h3>Schilder- & Stucwerk</h3>
+      <p>Muren en plafonds strak gepleisterd en geschilderd voor een frisse, nette uitstraling.</p>
+    </div>
+  </div>
+</section>
+
+<!-- PROJECTEN -->
+<section class="projecten" id="projecten">
+  <div class="section-header fade-in">
+    <span class="section-tag">Ons werk</span>
+    <h2>Recente projecten</h2>
+  </div>
+  <div class="projecten-grid" id="projecten-grid">
+    <div class="no-projects">Projecten worden geladen...</div>
+  </div>
+</section>
+
+<!-- OVER -->
+<section class="over" id="over">
+  <div class="over-tekst fade-in">
+    <span class="section-tag">Over ons</span>
+    <h2>Piet van Duijn — uw vakman in Zuid-Holland</h2>
+    <p>Met meer dan 15 jaar ervaring in de klussector weet ik wat kwaliteit betekent. Ik werk eerlijk, netjes en punctueel — en kom altijd mijn afspraken na.</p>
+    <p>Of het nu gaat om een kleine reparatie of een complete badkamerrenovatie, u kunt rekenen op vakmanschap en persoonlijke service.</p>
+    <div class="over-info" id="contact-info">
+      <div class="info-rij">
+        <svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81a19.79 19.79 0 01-3.07-8.7A2 2 0 012 .18h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 14.92z"/></svg>
+        <span id="info-telefoon">0624262413</span>
+      </div>
+      <div class="info-rij">
+        <svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+        <span id="info-email">piet_vanduijn@msn.com</span>
+      </div>
+      <div class="info-rij">
+        <svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+        <span id="info-regio">Zuid-Holland</span>
+      </div>
+    </div>
+  </div>
+  <div class="over-visual fade-in">
+    <div><span>15+</span></div>
+    <div><span class="v-label">Jaar vakmanschap</span></div>
+    <div><span class="v-label">Badkamers & toiletten</span></div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section class="contact" id="contact">
+  <div class="contact-inner">
+    <div class="contact-info fade-in">
+      <span class="section-tag">Offerte aanvragen</span>
+      <h2>Neem contact op</h2>
+      <p>Heeft u een klus of wilt u een vrijblijvende offerte? Stuur een bericht en ik neem zo snel mogelijk contact op.</p>
+      <div class="contact-detail">
+        <svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81a19.79 19.79 0 01-3.07-8.7A2 2 0 012 .18h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 14.92z"/></svg>
+        <a href="tel:0624262413">06 24 26 24 13</a>
+      </div>
+      <div class="contact-detail">
+        <svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+        <a href="mailto:piet_vanduijn@msn.com">piet_vanduijn@msn.com</a>
+      </div>
+    </div>
+    <div class="fade-in">
+      <div class="contact-form">
+        <div class="form-row">
+          <input type="text" id="naam" placeholder="Uw naam" required>
+          <input type="email" id="email" placeholder="E-mailadres" required>
+        </div>
+        <textarea id="bericht" placeholder="Beschrijf uw klus of vraag..." required></textarea>
+        <button class="btn-verzend" onclick="verstuurFormulier()">Verstuur bericht</button>
+        <div class="form-melding" id="form-melding"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-logo">De Klus<span>specialist</span> van Duijn</div>
+  <p>© 2025 · Zuid-Holland</p>
+</footer>
+
+<script>
+  // Scroll animaties
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('zichtbaar'); });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+  // Laad projecten
+  async function laadProjecten() {
+    const grid = document.getElementById('projecten-grid');
+    try {
+      const res = await fetch('/api/projects');
+      const projecten = await res.json();
+      if (!projecten.length) {
+        grid.innerHTML = '<div class="no-projects" style="color:#aaa">Projecten worden binnenkort toegevoegd.</div>';
+        return;
+      }
+      grid.innerHTML = projecten.map(p => `
+        <div class="project-card">
+          ${p.image_url ? `<img src="${p.image_url}" alt="${p.title}" loading="lazy">` : '<div style="width:100%;height:100%;background:#ddd;display:flex;align-items:center;justify-content:center;color:#aaa">Geen foto</div>'}
+          <div class="project-overlay">
+            <div class="project-info">
+              <h4>${p.title}</h4>
+              <span>${p.category}</span>
+            </div>
+          </div>
+        </div>
+      `).join('');
+    } catch (e) {
+      grid.innerHTML = '<div class="no-projects">Kon projecten niet laden.</div>';
+    }
+  }
+
+  // Contactformulier
+  async function verstuurFormulier() {
+    const naam = document.getElementById('naam').value.trim();
+    const email = document.getElementById('email').value.trim();
+    const bericht = document.getElementById('bericht').value.trim();
+    const melding = document.getElementById('form-melding');
+
+    melding.className = 'form-melding';
+    if (!naam || !email || !bericht) {
+      melding.textContent = 'Vul alle velden in.';
+      melding.className = 'form-melding fout'; return;
+    }
+    try {
+      const res = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name: naam, email, message: bericht })
+      });
+      if (res.ok) {
+        melding.textContent = 'Bedankt! Uw bericht is verzonden. Ik neem zo snel mogelijk contact op.';
+        melding.className = 'form-melding succes';
+        document.getElementById('naam').value = '';
+        document.getElementById('email').value = '';
+        document.getElementById('bericht').value = '';
+      } else throw new Error();
+    } catch {
+      melding.textContent = 'Er ging iets mis. Probeer het opnieuw of bel direct.';
+      melding.className = 'form-melding fout';
+    }
+  }
+
+  laadProjecten();
+</script>
+</body>
+</html>
