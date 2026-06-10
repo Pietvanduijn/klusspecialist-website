@@ -28,169 +28,141 @@ const storage = multer.diskStorage({
   }
 });
 
-const upload = multer({ 
+const upload = multer({
   storage,
   limits: { fileSize: 10 * 1024 * 1024 } // 10MB limit
 });
 
 // Database setup
 const db = new sqlite3.Database('./klusspecialist.db', (err) => {
-  if (err) console.error(err);
-  else console.log('Connected to SQLite database');
+  if (err) {
+    console.error('Database error:', err);
+  } else {
+    console.log('✅ Connected to SQLite database');
+  }
 });
 
-// Initialize database tables
 db.serialize(() => {
-  // Company info table
-  db.run(`CREATE TABLE IF NOT EXISTS company_info (
-    id INTEGER PRIMARY KEY,
-    name TEXT,
-    owner TEXT,
-    email TEXT,
-    phone TEXT,
-    region TEXT,
-    description TEXT
-  )`);
-
-  // Projects table
   db.run(`CREATE TABLE IF NOT EXISTS projects (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     title TEXT NOT NULL,
-    category TEXT NOT NULL,
     description TEXT,
+    category TEXT,
     image_url TEXT,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP
   )`);
 
-  // Messages table (contact form)
-  db.run(`CREATE TABLE IF NOT EXISTS messages (
+  db.run(`CREATE TABLE IF NOT EXISTS contact_messages (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     name TEXT NOT NULL,
     email TEXT NOT NULL,
     message TEXT NOT NULL,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP
   )`);
-
-  // Initialize company info with defaults
-  db.get('SELECT * FROM company_info LIMIT 1', (err, row) => {
-    if (!row) {
-      db.run(`INSERT INTO company_info (name, owner, email, phone, region, description) 
-              VALUES (?, ?, ?, ?, ?, ?)`,
-        ['De Klusspecialist van Duijn', 'Piet van Duijn', 'piet_vanduijn@msn.com', 
-         '0624262413', 'Zuid-Holland', 'Gespecialiseerd in badkamers, toiletinstallaties en klussen in en rondom het huis']
-      );
-    }
-  });
 });
 
-// API Routes
-
-// Get company info
-app.get('/api/company', (req, res) => {
-  db.get('SELECT * FROM company_info LIMIT 1', (err, row) => {
-    if (err) res.status(500).json({ error: err.message });
-    else res.json(row || {});
-  });
-});
-
-// Update company info
-app.post('/api/company', (req, res) => {
-  const { name, owner, email, phone, region, description } = req.body;
-  db.run(
-    `UPDATE company_info SET name=?, owner=?, email=?, phone=?, region=?, description=? WHERE id=1`,
-    [name, owner, email, phone, region, description],
-    function(err) {
-      if (err) res.status(500).json({ error: err.message });
-      else res.json({ success: true });
-    }
-  );
-});
-
-// Get all projects
+// API: Get all projects
 app.get('/api/projects', (req, res) => {
-  db.all('SELECT * FROM projects ORDER BY created_at DESC', (err, rows) => {
-    if (err) res.status(500).json({ error: err.message });
-    else res.json(rows || []);
+  db.all('SELECT * FROM projects ORDER BY created_at DESC', [], (err, rows) => {
+    if (err) {
+      res.status(500).json({ error: err.message });
+      return;
+    }
+    res.json(rows);
   });
 });
 
-// Get single project
-app.get('/api/projects/:id', (req, res) => {
-  db.get('SELECT * FROM projects WHERE id=?', [req.params.id], (err, row) => {
-    if (err) res.status(500).json({ error: err.message });
-    else res.json(row || {});
-  });
-});
-
-// Create project with image
+// API: Add project
 app.post('/api/projects', upload.single('image'), (req, res) => {
-  const { title, category, description } = req.body;
-  const image_url = req.file ? `/uploads/${req.file.filename}` : null;
-  
+  const { title, description, category } = req.body;
+  const image_url = req.file ? '/uploads/' + req.file.filename : null;
+
   db.run(
-    `INSERT INTO projects (title, category, description, image_url) VALUES (?, ?, ?, ?)`,
-    [title, category, description, image_url],
+    'INSERT INTO projects (title, description, category, image_url) VALUES (?, ?, ?, ?)',
+    [title, description, category, image_url],
     function(err) {
-      if (err) res.status(500).json({ error: err.message });
-      else res.json({ id: this.lastID, title, category, description, image_url });
+      if (err) {
+        res.status(500).json({ error: err.message });
+        return;
+      }
+      res.json({ id: this.lastID, title, description, category, image_url });
     }
   );
 });
 
-// Update project
-app.put('/api/projects/:id', upload.single('image'), (req, res) => {
-  const { title, category, description } = req.body;
-  const image_url = req.file ? `/uploads/${req.file.filename}` : req.body.image_url;
-  
-  db.run(
-    `UPDATE projects SET title=?, category=?, description=?, image_url=? WHERE id=?`,
-    [title, category, description, image_url, req.params.id],
-    function(err) {
-      if (err) res.status(500).json({ error: err.message });
-      else res.json({ success: true });
-    }
-  );
-});
-
-// Delete project
+// API: Delete project
 app.delete('/api/projects/:id', (req, res) => {
-  db.run('DELETE FROM projects WHERE id=?', [req.params.id], function(err) {
-    if (err) res.status(500).json({ error: err.message });
-    else res.json({ success: true });
+  db.run('DELETE FROM projects WHERE id = ?', [req.params.id], (err) => {
+    if (err) {
+      res.status(500).json({ error: err.message });
+      return;
+    }
+    res.json({ success: true });
   });
 });
 
-// Submit contact form
-app.post('/api/contact', (req, res) => {
+// API: Contact form met Resend e-mail
+app.post('/api/contact', async (req, res) => {
   const { name, email, message } = req.body;
-  
+
+  if (!name || !email || !message) {
+    return res.status(400).json({ error: 'Alle velden zijn verplicht' });
+  }
+
+  // Sla op in database
   db.run(
-    `INSERT INTO messages (name, email, message) VALUES (?, ?, ?)`,
+    'INSERT INTO contact_messages (name, email, message) VALUES (?, ?, ?)',
     [name, email, message],
-    function(err) {
-      if (err) res.status(500).json({ error: err.message });
-      else res.json({ success: true, id: this.lastID });
+    async (err) => {
+      if (err) {
+        console.error('DB error:', err);
+      }
     }
   );
-});
 
-// Get all messages (for admin)
-app.get('/api/messages', (req, res) => {
-  db.all('SELECT * FROM messages ORDER BY created_at DESC', (err, rows) => {
-    if (err) res.status(500).json({ error: err.message });
-    else res.json(rows || []);
-  });
-});
+  // Verstuur e-mail via Resend
+  const apiKey = process.env.RESEND_API_KEY;
 
-// Health check
-app.get('/api/health', (req, res) => {
-  res.json({ status: 'ok' });
+  if (apiKey) {
+    try {
+      const response = await fetch('https://api.resend.com/emails', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${apiKey}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          from: 'website@klusspecialistvanduijn.nl',
+          to: 'piet_vanduijn@msn.com',
+          subject: `Nieuw bericht van ${name} via de website`,
+          html: `
+            <h2>Nieuw contactbericht</h2>
+            <p><strong>Naam:</strong> ${name}</p>
+            <p><strong>E-mail:</strong> ${email}</p>
+            <p><strong>Bericht:</strong></p>
+            <p>${message.replace(/\n/g, '<br>')}</p>
+          `
+        })
+      });
+
+      if (response.ok) {
+        console.log('E-mail verstuurd via Resend');
+      } else {
+        const error = await response.json();
+        console.error('Resend fout:', error);
+      }
+    } catch (err) {
+      console.error('E-mail fout:', err);
+    }
+  }
+
+  res.json({ success: true, message: 'Bericht ontvangen' });
 });
 
 // Start server
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => {
   console.log(`✅ Server running at http://localhost:${PORT}`);
   console.log(`📁 Uploads folder: ./uploads`);
-  console.log(`💾 Database: ./klusspecialist.db`);
+  console.log(`🗄️ Database: ./klusspecialist.db`);
 });
