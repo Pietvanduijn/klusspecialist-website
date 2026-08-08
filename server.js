@@ -14,7 +14,13 @@ app.use(bodyParser.json({ limit: '50mb' }));
 app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
 app.use(express.static('public'));
 app.use('/uploads', express.static('uploads'));
-
+// Redirect kaal domein naar www
+app.use((req, res, next) => {
+  if (req.hostname === 'klusspecialistvanduijn.nl') {
+    return res.redirect(301, 'https://www.klusspecialistvanduijn.nl' + req.url);
+  }
+  next();
+});
 // Multer for file uploads
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
