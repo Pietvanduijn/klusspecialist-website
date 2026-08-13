@@ -1,0 +1,49 @@
+<%- include('_kop') %>
+
+<h1>Berichten</h1>
+<p class="onder-titel">Alles wat via het contactformulier binnenkwam. U krijgt deze berichten ook per e-mail — dit is uw achtervang als een mail in de spam belandt.</p>
+
+<% if (!berichten.length) { %>
+  <p class="leeg">Er zijn nog geen berichten binnengekomen.</p>
+<% } %>
+
+<%
+  // SQLite bewaart de tijd in UTC; de Z zorgt dat hij naar Nederlandse tijd omrekent
+  function datum(t) {
+    return new Date(String(t).replace(' ', 'T') + 'Z').toLocaleString('nl-NL', {
+      day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit',
+    });
+  }
+%>
+
+<% berichten.forEach(function (b) { %>
+  <div class="bericht <%= b.gelezen ? '' : 'nieuw' %>">
+    <div class="bericht-kop">
+      <div>
+        <div class="bericht-naam"><%= b.naam %></div>
+        <a href="mailto:<%= b.email %>" style="font-size:0.82rem"><%= b.email %></a>
+      </div>
+      <div class="bericht-datum"><%= datum(b.aangemaakt) %></div>
+    </div>
+
+    <div class="bericht-tekst"><%= b.bericht %></div>
+
+    <div class="foto-acties">
+      <a href="mailto:<%= b.email %>?subject=<%= encodeURIComponent('Uw bericht via de website') %>"
+         class="knop klein leeg" style="text-decoration:none">Beantwoorden</a>
+
+      <% if (!b.gelezen) { %>
+        <form method="post" action="/admin/berichten/<%= b.id %>/gelezen">
+          <button type="submit" class="knop klein leeg">Markeer als gelezen</button>
+        </form>
+      <% } %>
+
+      <form method="post" action="/admin/berichten/<%= b.id %>/verwijderen"
+            onsubmit="return confirm('Dit bericht definitief verwijderen?')">
+        <button type="submit" class="knop klein gevaar">Verwijderen</button>
+      </form>
+    </div>
+  </div>
+<% }); %>
+
+<%- include('_voet') %>

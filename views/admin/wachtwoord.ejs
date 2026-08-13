@@ -1,0 +1,30 @@
+<%- include('_kop') %>
+
+<h1>Wachtwoord</h1>
+<p class="onder-titel">Hiermee logt u in op dit beheerscherm. Kies iets dat u onthoudt maar niemand raadt.</p>
+
+<% if (fout) { %>
+  <div class="melding fout"><%= fout %></div>
+<% } %>
+
+<form method="post" action="/admin/wachtwoord" style="max-width:400px">
+  <div class="veld">
+    <label for="huidig">Huidig wachtwoord</label>
+    <input type="password" id="huidig" name="huidig" autocomplete="current-password" required>
+  </div>
+
+  <div class="veld">
+    <label for="nieuw">Nieuw wachtwoord</label>
+    <div class="uitleg">Minstens 8 tekens.</div>
+    <input type="password" id="nieuw" name="nieuw" autocomplete="new-password" minlength="8" required>
+  </div>
+
+  <div class="veld">
+    <label for="herhaal">Nieuw wachtwoord nog een keer</label>
+    <input type="password" id="herhaal" name="herhaal" autocomplete="new-password" minlength="8" required>
+  </div>
+
+  <button type="submit" class="knop">Wachtwoord wijzigen</button>
+</form>
+
+<%- include('_voet') %>

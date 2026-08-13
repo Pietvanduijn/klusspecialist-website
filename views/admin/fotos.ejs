@@ -1,0 +1,59 @@
+<%- include('_kop') %>
+
+<h1>Foto's</h1>
+<p class="onder-titel">De foto's van uw werk, zoals ze op de website onder "Recente projecten" staan.</p>
+
+<form method="post" action="/admin/fotos" enctype="multipart/form-data" class="upload-vak">
+  <input type="file" name="fotos" accept="image/*" multiple required
+         onchange="document.getElementById('upload-knop').style.display='inline-block'">
+  <p>U kunt meerdere foto's tegelijk kiezen. Ze worden automatisch verkleind,
+     dus foto's rechtstreeks van uw telefoon zijn prima.</p>
+  <button type="submit" class="knop" id="upload-knop" style="display:none">Foto's toevoegen</button>
+</form>
+
+<% if (!projecten.length) { %>
+  <p class="leeg">Er staan nog geen foto's op de website.<br>Kies hierboven een foto om te beginnen.</p>
+<% } %>
+
+<div class="fotos">
+<% projecten.forEach(function (p, n) { %>
+  <div class="foto-kaart">
+    <img src="<%= p.bestand %>" alt="">
+    <div class="velden">
+
+      <form method="post" action="/admin/fotos/<%= p.id %>" id="bewerk-<%= p.id %>">
+        <input type="text" name="titel" value="<%= p.titel %>" maxlength="100"
+               placeholder="Bijschrift, bijvoorbeeld: Badkamerrenovatie">
+        <input type="text" name="alt" value="<%= p.alt %>" maxlength="300"
+               placeholder="Omschrijving voor Google, bijvoorbeeld: Nieuwe badkamer in Noordwijk">
+      </form>
+
+      <div class="foto-acties">
+        <button type="submit" form="bewerk-<%= p.id %>" class="knop klein leeg">Opslaan</button>
+
+        <form method="post" action="/admin/fotos/<%= p.id %>/verplaats">
+          <input type="hidden" name="richting" value="omhoog">
+          <button type="submit" class="knop klein leeg" title="Naar voren"
+                  <%= n === 0 ? 'disabled' : '' %>>↑</button>
+        </form>
+
+        <form method="post" action="/admin/fotos/<%= p.id %>/verplaats">
+          <input type="hidden" name="richting" value="omlaag">
+          <button type="submit" class="knop klein leeg" title="Naar achteren"
+                  <%= n === projecten.length - 1 ? 'disabled' : '' %>>↓</button>
+        </form>
+
+        <form method="post" action="/admin/fotos/<%= p.id %>/verwijderen"
+              onsubmit="return confirm('Deze foto definitief verwijderen van de website?')">
+          <button type="submit" class="knop klein gevaar">Verwijderen</button>
+        </form>
+
+        <% if (n === 0) { %><span class="eerste-tekst">Staat groot op de site</span><% } %>
+      </div>
+
+    </div>
+  </div>
+<% }); %>
+</div>
+
+<%- include('_voet') %>

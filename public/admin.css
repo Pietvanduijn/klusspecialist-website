@@ -1,0 +1,216 @@
+/* Beheerscherm — zelfde donker-gouden stijl als de website.
+   Opzet is telefoon-eerst: Piet uploadt zijn klusfoto's vanaf zijn mobiel. */
+
+:root {
+  --goud: #c9a84c;
+  --goud-licht: #e2c47a;
+  --donker: #111110;
+  --donker2: #1a1a18;
+  --donker3: #232320;
+  --wit: #f8f5f0;
+  --grijs: #8a8a82;
+  --rood: #c0564b;
+  --groen: #5a9367;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: 'Montserrat', system-ui, sans-serif;
+  background: var(--donker);
+  color: var(--wit);
+  line-height: 1.6;
+  -webkit-text-size-adjust: 100%;
+}
+
+a { color: var(--goud); }
+
+/* ---------------------------------------------------------------- balk */
+
+.balk {
+  background: var(--donker2);
+  border-bottom: 1px solid rgba(201, 168, 76, 0.2);
+  padding: 0.9rem 1.2rem;
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 1rem; flex-wrap: wrap;
+}
+.balk-naam {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  color: var(--goud); font-size: 1.15rem; letter-spacing: 0.02em;
+}
+.balk-rechts { display: flex; align-items: center; gap: 0.75rem; font-size: 0.8rem; }
+.balk-rechts a { color: var(--grijs); text-decoration: none; }
+.balk-rechts a:hover { color: var(--goud); }
+
+.knop-uit {
+  background: none; border: 1px solid rgba(201, 168, 76, 0.3);
+  color: var(--grijs); padding: 0.35rem 0.8rem; border-radius: 3px;
+  font: inherit; font-size: 0.8rem; cursor: pointer;
+}
+.knop-uit:hover { border-color: var(--goud); color: var(--goud); }
+
+/* --------------------------------------------------------------- menu */
+
+.menu {
+  display: flex; gap: 0.25rem; padding: 0 1.2rem;
+  background: var(--donker2); overflow-x: auto;
+  border-bottom: 1px solid rgba(201, 168, 76, 0.1);
+}
+.menu a {
+  padding: 0.75rem 1rem; color: var(--grijs); text-decoration: none;
+  font-size: 0.85rem; white-space: nowrap;
+  border-bottom: 2px solid transparent;
+}
+.menu a:hover { color: var(--wit); }
+.menu a.actief { color: var(--goud); border-bottom-color: var(--goud); }
+
+.telbal {
+  background: var(--goud); color: var(--donker);
+  border-radius: 10px; padding: 0 0.45rem;
+  font-size: 0.7rem; font-weight: 600; margin-left: 0.35rem;
+}
+
+/* --------------------------------------------------------------- vlak */
+
+.inhoud { max-width: 880px; margin: 0 auto; padding: 1.5rem 1.2rem 4rem; }
+
+h1 {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: 1.7rem; font-weight: 600; margin-bottom: 0.3rem;
+}
+.onder-titel { color: var(--grijs); font-size: 0.85rem; margin-bottom: 1.8rem; }
+
+h2 {
+  font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.12em;
+  color: var(--goud); font-weight: 600;
+  margin: 2.2rem 0 0.9rem; padding-bottom: 0.5rem;
+  border-bottom: 1px solid rgba(201, 168, 76, 0.15);
+}
+h2:first-of-type { margin-top: 0; }
+
+/* --------------------------------------------------------------- melding */
+
+.melding {
+  background: rgba(90, 147, 103, 0.15); border: 1px solid var(--groen);
+  color: #a8d4b2; padding: 0.7rem 1rem; border-radius: 4px;
+  margin-bottom: 1.5rem; font-size: 0.87rem;
+}
+.melding.fout {
+  background: rgba(192, 86, 75, 0.15); border-color: var(--rood); color: #e4a9a2;
+}
+
+/* --------------------------------------------------------------- velden */
+
+.veld { margin-bottom: 1.3rem; }
+.veld label { display: block; font-size: 0.85rem; margin-bottom: 0.35rem; font-weight: 500; }
+.veld .uitleg { color: var(--grijs); font-size: 0.76rem; margin-bottom: 0.45rem; }
+
+input[type=text], input[type=password], textarea {
+  width: 100%; background: var(--donker3); color: var(--wit);
+  border: 1px solid rgba(201, 168, 76, 0.2); border-radius: 4px;
+  padding: 0.65rem 0.8rem; font: inherit; font-size: 0.9rem;
+}
+input:focus, textarea:focus { outline: none; border-color: var(--goud); }
+textarea { min-height: 5.5rem; resize: vertical; line-height: 1.55; }
+
+.teller { font-size: 0.72rem; color: var(--grijs); text-align: right; margin-top: 0.2rem; }
+.teller.lang { color: var(--rood); }
+
+input[type=file] { font-size: 0.85rem; color: var(--grijs); max-width: 100%; }
+input[type=file]::file-selector-button {
+  background: var(--donker3); color: var(--goud); font: inherit; font-size: 0.82rem;
+  border: 1px solid rgba(201, 168, 76, 0.3); border-radius: 3px;
+  padding: 0.4rem 0.8rem; margin-right: 0.7rem; cursor: pointer;
+}
+
+/* --------------------------------------------------------------- knoppen */
+
+.knop {
+  background: var(--goud); color: var(--donker); border: none; border-radius: 3px;
+  padding: 0.7rem 1.6rem; font: inherit; font-size: 0.85rem; font-weight: 600;
+  letter-spacing: 0.03em; cursor: pointer;
+}
+.knop:hover { background: var(--goud-licht); }
+.knop.klein { padding: 0.4rem 0.9rem; font-size: 0.78rem; }
+.knop.leeg {
+  background: none; border: 1px solid rgba(201, 168, 76, 0.35); color: var(--goud);
+}
+.knop.leeg:hover { background: rgba(201, 168, 76, 0.1); }
+.knop.gevaar { background: none; border: 1px solid rgba(192, 86, 75, 0.5); color: #d88479; }
+.knop.gevaar:hover { background: rgba(192, 86, 75, 0.15); }
+
+.opslaan-balk {
+  position: sticky; bottom: 0; background: var(--donker);
+  border-top: 1px solid rgba(201, 168, 76, 0.15);
+  padding: 1rem 0; margin-top: 2rem;
+}
+
+/* --------------------------------------------------------------- foto's */
+
+.upload-vak {
+  border: 2px dashed rgba(201, 168, 76, 0.3); border-radius: 6px;
+  padding: 1.6rem 1.2rem; text-align: center; margin-bottom: 2rem;
+  background: var(--donker2);
+}
+.upload-vak p { color: var(--grijs); font-size: 0.85rem; margin: 0.7rem 0; }
+
+.fotos { display: grid; gap: 1rem; }
+.foto-kaart {
+  display: grid; grid-template-columns: 110px 1fr; gap: 1rem;
+  background: var(--donker2); border: 1px solid rgba(201, 168, 76, 0.12);
+  border-radius: 6px; padding: 0.85rem; align-items: start;
+}
+.foto-kaart img {
+  width: 110px; height: 82px; object-fit: cover; border-radius: 4px; display: block;
+}
+.foto-kaart .velden { min-width: 0; }
+.foto-kaart input[type=text] { margin-bottom: 0.5rem; font-size: 0.85rem; padding: 0.45rem 0.6rem; }
+.foto-acties { display: flex; gap: 0.4rem; flex-wrap: wrap; align-items: center; }
+.eerste-tekst {
+  font-size: 0.72rem; color: var(--goud); border: 1px solid rgba(201, 168, 76, 0.3);
+  border-radius: 3px; padding: 0.15rem 0.5rem;
+}
+
+/* -------------------------------------------------------------- berichten */
+
+.bericht {
+  background: var(--donker2); border: 1px solid rgba(201, 168, 76, 0.12);
+  border-left: 3px solid transparent;
+  border-radius: 6px; padding: 1rem 1.1rem; margin-bottom: 0.9rem;
+}
+.bericht.nieuw { border-left-color: var(--goud); }
+.bericht-kop {
+  display: flex; justify-content: space-between; gap: 1rem;
+  flex-wrap: wrap; margin-bottom: 0.5rem;
+}
+.bericht-naam { font-weight: 600; font-size: 0.92rem; }
+.bericht-datum { color: var(--grijs); font-size: 0.76rem; }
+.bericht-tekst { white-space: pre-wrap; font-size: 0.88rem; margin: 0.6rem 0 0.9rem; }
+.leeg { color: var(--grijs); text-align: center; padding: 3rem 1rem; font-size: 0.9rem; }
+
+/* --------------------------------------------------------------- inloggen */
+
+.inlog-scherm {
+  min-height: 100vh; display: flex; align-items: center;
+  justify-content: center; padding: 1.5rem;
+}
+.inlog-vak {
+  width: 100%; max-width: 340px; background: var(--donker2);
+  border: 1px solid rgba(201, 168, 76, 0.2); border-radius: 8px; padding: 2rem 1.7rem;
+}
+.inlog-vak h1 { text-align: center; font-size: 1.4rem; margin-bottom: 0.2rem; }
+.inlog-vak .onder-titel { text-align: center; margin-bottom: 1.7rem; }
+.inlog-vak .knop { width: 100%; }
+
+/* -------------------------------------------------------------- telefoon */
+
+@media (max-width: 560px) {
+  .inhoud { padding: 1.2rem 1rem 3rem; }
+  .foto-kaart { grid-template-columns: 1fr; }
+  .foto-kaart img { width: 100%; height: 170px; }
+  .balk { padding: 0.8rem 1rem; }
+  .menu { padding: 0 0.6rem; }
+  .menu a { padding: 0.7rem 0.75rem; font-size: 0.8rem; }
+  .knop { width: 100%; }
+  .knop.klein { width: auto; }
+}

@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= i.pagina_titel %></title>
+  <meta name="description" content="<%= i.meta_omschrijving %>">
+  <link rel="canonical" href="https://www.klusspecialistvanduijn.nl/">
+
+  <!-- Delen via WhatsApp, Facebook e.d. -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="<%= i.pagina_titel %>">
+  <meta property="og:description" content="<%= i.meta_omschrijving %>">
+  <meta property="og:url" content="https://www.klusspecialistvanduijn.nl/">
+  <meta property="og:image" content="<%= siteUrl %><%= i.hero_foto %>">
+  <meta property="og:locale" content="nl_NL">
+
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+  <!-- Gestructureerde gegevens: vertelt Google dat dit een lokaal bedrijf is -->
+  <script type="application/ld+json"><%- jsonld %></script>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo"><%= i.bedrijfsnaam %></div>
+  <ul class="nav-links">
+    <li><a href="#over">Over ons</a></li>
+    <li><a href="#diensten">Diensten</a></li>
+    <li><a href="#portfolio">Portfolio</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg" style="background-image: url('<%= i.hero_foto %>')"></div>
+  <div class="hero-overlay"></div>
+  <div class="hero-content">
+    <span class="hero-tag"><%= i.hero_label %></span>
+    <h1><%= i.hero_titel %><br><em><%= i.hero_titel_cursief %></em></h1>
+    <p><%= i.hero_tekst %></p>
+    <div class="hero-btns">
+      <a href="#portfolio" class="btn-primary"><%= i.hero_knop1 %></a>
+      <a href="#contact" class="btn-outline"><%= i.hero_knop2 %></a>
+    </div>
+  </div>
+</section>
+
+<!-- DIENSTEN -->
+<section class="diensten section" id="diensten">
+  <div class="diensten-header fade">
+    <span class="section-label"><%= i.diensten_label %></span>
+    <h2 class="section-title"><%= i.diensten_titel %></h2>
+    <div class="section-divider"></div>
+  </div>
+  <div class="diensten-grid fade">
+    <div class="dienst">
+      <div class="dienst-nr">01</div>
+      <div class="dienst-lijn"></div>
+      <h3><%= i.dienst1_titel %></h3>
+      <p><%= i.dienst1_tekst %></p>
+    </div>
+    <div class="dienst">
+      <div class="dienst-nr">02</div>
+      <div class="dienst-lijn"></div>
+      <h3><%= i.dienst2_titel %></h3>
+      <p><%= i.dienst2_tekst %></p>
+    </div>
+    <div class="dienst">
+      <div class="dienst-nr">03</div>
+      <div class="dienst-lijn"></div>
+      <h3><%= i.dienst3_titel %></h3>
+      <p><%= i.dienst3_tekst %></p>
+    </div>
+    <div class="dienst">
+      <div class="dienst-nr">04</div>
+      <div class="dienst-lijn"></div>
+      <h3><%= i.dienst4_titel %></h3>
+      <p><%= i.dienst4_tekst %></p>
+    </div>
+  </div>
+</section>
+
+<!-- PORTFOLIO -->
+<section class="portfolio section" id="portfolio">
+  <div class="portfolio-header fade">
+    <span class="section-label"><%= i.portfolio_label %></span>
+    <h2 class="section-title"><%= i.portfolio_titel %></h2>
+    <div class="section-divider"></div>
+  </div>
+  <div class="portfolio-grid fade" id="portfolio-grid">
+    <% projecten.forEach(function (p, n) { %>
+    <div class="portfolio-item<%= n === 0 ? ' item-groot' : '' %>">
+      <img src="<%= p.bestand %>" alt="<%= p.alt || p.titel %>" loading="lazy">
+      <div class="portfolio-hover"><span><%= p.titel %></span></div>
+    </div>
+    <% }); %>
+  </div>
+</section>
+
+<!-- OVER -->
+<section class="over" id="over">
+  <div class="over-foto">
+    <img src="<%= i.over_foto %>" alt="<%= i.over_titel %>">
+  </div>
+  <div class="over-tekst fade">
+    <span class="section-label"><%= i.over_label %></span>
+    <h2 class="section-title"><%= i.over_titel %></h2>
+    <div class="section-divider"></div>
+    <p><%= i.over_tekst1 %></p>
+    <p><%= i.over_tekst2 %></p>
+    <div class="over-feiten">
+      <div>
+        <div class="feit-nr"><%= i.feit1_getal %></div>
+        <div class="feit-label"><%= i.feit1_label %></div>
+      </div>
+      <div>
+        <div class="feit-nr"><%= i.feit2_getal %></div>
+        <div class="feit-label"><%= i.feit2_label %></div>
+      </div>
+    </div>
+    <div class="contact-rijen">
+      <div class="contact-rij">
+        <svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81a19.79 19.79 0 01-3.07-8.7A2 2 0 012 .18h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 14.92z"/></svg>
+        <a href="tel:<%= telLink %>"><%= i.telefoon %></a>
+      </div>
+      <div class="contact-rij">
+        <svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+        <a href="mailto:<%= i.email %>"><%= i.email %></a>
+      </div>
+      <div class="contact-rij">
+        <svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+        <span><%= adres %></span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section class="contact-section section" id="contact">
+  <div class="contact-inner">
+    <div class="contact-links fade">
+      <span class="section-label"><%= i.contact_label %></span>
+      <h2 class="section-title"><%= i.contact_titel %></h2>
+      <div class="section-divider"></div>
+      <p><%= i.contact_tekst %></p>
+    </div>
+    <div class="fade">
+      <div class="contact-form">
+        <div class="form-rij">
+          <input type="text" id="naam" placeholder="Uw naam">
+          <input type="email" id="email" placeholder="E-mailadres">
+        </div>
+        <textarea id="bericht" placeholder="Beschrijf uw klus of vraag..."></textarea>
+        <button class="btn-verstuur" onclick="verstuur()">Verstuur bericht</button>
+        <div class="form-melding" id="melding"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-logo"><%= i.bedrijfsnaam %></div>
+  <p><%= i.footer_tekst %> · <%= adres %> · <a href="tel:<%= telLink %>"><%= i.telefoon %></a></p>
+</footer>
+
+<script>
+  // Scroll fade
+  const obs = new IntersectionObserver(els => {
+    els.forEach(e => { if (e.isIntersecting) e.target.classList.add('in'); });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.fade').forEach(el => obs.observe(el));
+
+  // Contactformulier
+  async function verstuur() {
+    const naam = document.getElementById('naam').value.trim();
+    const email = document.getElementById('email').value.trim();
+    const bericht = document.getElementById('bericht').value.trim();
+    const melding = document.getElementById('melding');
+    melding.className = 'form-melding';
+    if (!naam || !email || !bericht) {
+      melding.textContent = 'Vul alle velden in.';
+      melding.className = 'form-melding fout'; return;
+    }
+    try {
+      const res = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name: naam, email, message: bericht })
+      });
+      if (res.ok) {
+        melding.textContent = 'Bedankt! Uw bericht is verzonden.';
+        melding.className = 'form-melding succes';
+        document.getElementById('naam').value = '';
+        document.getElementById('email').value = '';
+        document.getElementById('bericht').value = '';
+      } else throw new Error();
+    } catch {
+      melding.textContent = 'Er ging iets mis. Probeer het opnieuw of bel direct.';
+      melding.className = 'form-melding fout';
+    }
+  }
+</script>
+</body>
+</html>

@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Inloggen · De Klusspecialist van Duijn</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/admin.css">
+</head>
+<body>
+
+<div class="inlog-scherm">
+  <form method="post" action="/admin/inloggen" class="inlog-vak">
+    <h1>Beheer</h1>
+    <p class="onder-titel">De Klusspecialist van Duijn</p>
+
+    <% if (fout) { %>
+      <div class="melding fout"><%= fout %></div>
+    <% } %>
+
+    <div class="veld">
+      <label for="wachtwoord">Wachtwoord</label>
+      <input type="password" id="wachtwoord" name="wachtwoord" autocomplete="current-password" autofocus required>
+    </div>
+
+    <button type="submit" class="knop">Inloggen</button>
+  </form>
+</div>
+
+</body>
+</html>

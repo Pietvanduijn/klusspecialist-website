@@ -1,0 +1,71 @@
+<%- include('_kop') %>
+
+<h1>Teksten</h1>
+<p class="onder-titel">Alles wat er op de website staat. Wijzigingen zijn direct zichtbaar nadat u opslaat.</p>
+
+<%
+  const namen = {
+    google:   ['Vindbaarheid in Google', 'Wat mensen zien in de zoekresultaten. Belangrijk voor nieuwe klanten.'],
+    bovenaan: ['Bovenaan de pagina', 'Het eerste wat bezoekers zien.'],
+    diensten: ['Diensten', 'De vier blokken met wat u doet.'],
+    portfolio:['Kopjes boven de foto\'s', 'De foto\'s zelf beheert u onder "Foto\'s".'],
+    over:     ['Over ons', 'Uw verhaal en uw foto.'],
+    contact:  ['Contactgegevens', 'Houd deze exact gelijk aan uw Google Bedrijfsprofiel.'],
+    algemeen: ['Algemeen', 'Bedrijfsnaam en de tekst onderaan de pagina.'],
+  };
+  const maxLengte = { pagina_titel: 60, meta_omschrijving: 155 };
+%>
+
+<form method="post" action="/admin/teksten" enctype="multipart/form-data">
+
+<% for (const [groep, velden] of groepen) { %>
+  <h2><%= (namen[groep] || [groep])[0] %></h2>
+  <% if (namen[groep] && namen[groep][1]) { %>
+    <p class="onder-titel" style="margin-top:-0.5rem"><%= namen[groep][1] %></p>
+  <% } %>
+
+  <% velden.forEach(function (v) { %>
+    <div class="veld">
+      <label for="<%= v.sleutel %>"><%= v.label %></label>
+      <% if (v.uitleg) { %><div class="uitleg"><%= v.uitleg %></div><% } %>
+
+      <% if (v.soort === 'afbeelding') { %>
+        <img src="<%= v.waarde %>" alt="" style="max-width:230px;width:100%;border-radius:4px;display:block;margin-bottom:0.6rem">
+        <input type="file" id="<%= v.sleutel %>" name="<%= v.sleutel %>" accept="image/*">
+
+      <% } else if (v.soort === 'tekstvak') { %>
+        <textarea id="<%= v.sleutel %>" name="<%= v.sleutel %>"
+                  <% if (maxLengte[v.sleutel]) { %>data-max="<%= maxLengte[v.sleutel] %>"<% } %>
+        ><%= v.waarde %></textarea>
+        <% if (maxLengte[v.sleutel]) { %><div class="teller"></div><% } %>
+
+      <% } else { %>
+        <input type="text" id="<%= v.sleutel %>" name="<%= v.sleutel %>" value="<%= v.waarde %>"
+               <% if (maxLengte[v.sleutel]) { %>data-max="<%= maxLengte[v.sleutel] %>"<% } %>>
+        <% if (maxLengte[v.sleutel]) { %><div class="teller"></div><% } %>
+      <% } %>
+    </div>
+  <% }); %>
+<% } %>
+
+  <div class="opslaan-balk">
+    <button type="submit" class="knop">Wijzigingen opslaan</button>
+  </div>
+</form>
+
+<script>
+  // Laat bij de Google-velden zien hoeveel tekens er nog bij kunnen
+  document.querySelectorAll('[data-max]').forEach(function (veld) {
+    var teller = veld.parentElement.querySelector('.teller');
+    if (!teller) return;
+    function bij() {
+      var max = +veld.dataset.max, n = veld.value.length;
+      teller.textContent = n + ' van de ' + max + ' tekens';
+      teller.classList.toggle('lang', n > max);
+    }
+    veld.addEventListener('input', bij);
+    bij();
+  });
+</script>
+
+<%- include('_voet') %>

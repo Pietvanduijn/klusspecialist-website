@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Beheer · De Klusspecialist van Duijn</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/admin.css">
+</head>
+<body>
+
+<div class="balk">
+  <div class="balk-naam">Beheer · De Klusspecialist van Duijn</div>
+  <div class="balk-rechts">
+    <a href="/" target="_blank" rel="noopener">Bekijk de website ↗</a>
+    <form method="post" action="/admin/uitloggen">
+      <button type="submit" class="knop-uit">Uitloggen</button>
+    </form>
+  </div>
+</div>
+
+<nav class="menu">
+  <a href="/admin" class="<%= pagina === 'fotos' ? 'actief' : '' %>">Foto's</a>
+  <a href="/admin/teksten" class="<%= pagina === 'teksten' ? 'actief' : '' %>">Teksten</a>
+  <a href="/admin/berichten" class="<%= pagina === 'berichten' ? 'actief' : '' %>">Berichten<% if (ongelezen) { %><span class="telbal"><%= ongelezen %></span><% } %></a>
+  <a href="/admin/wachtwoord" class="<%= pagina === 'wachtwoord' ? 'actief' : '' %>">Wachtwoord</a>
+</nav>
+
+<main class="inhoud">
+<% if (typeof melding !== 'undefined' && melding) { %>
+  <div class="melding"><%= melding %></div>
+<% } %>
