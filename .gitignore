@@ -1,0 +1,13 @@
+node_modules/
+
+# Database en geuploade foto's. Deze staan op het Railway-volume en horen
+# NIET in GitHub — anders overschrijft een deploy Piets wijzigingen.
+data/
+
+# Wachtwoorden en sleutels
+.env
+
+# Rommel
+*.log
+.DS_Store
+Thumbs.db
