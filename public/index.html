@@ -3,8 +3,53 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>De Klusspecialist van Duijn</title>
+  <title>Klusbedrijf Noordwijk | De Klusspecialist van Duijn</title>
+  <meta name="description" content="Klusbedrijf in Noordwijk met ruim 15 jaar ervaring. Badkamerrenovatie, tegelwerk, schilder- en stucwerk in Noordwijk en de Bollenstreek. Bel 06 24 26 24 13.">
+  <link rel="canonical" href="https://www.klusspecialistvanduijn.nl/">
+
+  <!-- Delen via WhatsApp, Facebook e.d. -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="De Klusspecialist van Duijn — Klusbedrijf in Noordwijk">
+  <meta property="og:description" content="Badkamers, tegelwerk, reparaties en schilderwerk in Noordwijk en omstreken. Ruim 15 jaar ervaring.">
+  <meta property="og:url" content="https://www.klusspecialistvanduijn.nl/">
+  <meta property="og:image" content="https://www.klusspecialistvanduijn.nl/uploads/foto1.jpg">
+  <meta property="og:locale" content="nl_NL">
+
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+  <!-- Gestructureerde gegevens: vertelt Google dat dit een lokaal bedrijf is -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "HomeAndConstructionBusiness",
+    "name": "De Klusspecialist van Duijn",
+    "description": "Klusbedrijf in Noordwijk. Badkamer- en toiletrenovatie, tegelwerk, vloeren, reparaties, onderhoud, schilder- en stucwerk.",
+    "url": "https://www.klusspecialistvanduijn.nl/",
+    "image": "https://www.klusspecialistvanduijn.nl/uploads/foto1.jpg",
+    "telephone": "+31624262413",
+    "email": "piet_vanduijn@msn.com",
+    "founder": { "@type": "Person", "name": "Piet van Duijn" },
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": "De Mook 6",
+      "postalCode": "2203 ZD",
+      "addressLocality": "Noordwijk",
+      "addressRegion": "Zuid-Holland",
+      "addressCountry": "NL"
+    },
+    "areaServed": [
+      { "@type": "City", "name": "Noordwijk" },
+      { "@type": "City", "name": "Noordwijkerhout" },
+      { "@type": "City", "name": "Katwijk" },
+      { "@type": "City", "name": "Lisse" },
+      { "@type": "City", "name": "Sassenheim" },
+      { "@type": "City", "name": "Voorhout" },
+      { "@type": "City", "name": "Hillegom" },
+      { "@type": "City", "name": "Leiden" }
+    ],
+    "knowsAbout": ["Badkamerrenovatie", "Toiletrenovatie", "Tegelwerk", "Vloeren", "Stucwerk", "Schilderwerk", "Onderhoud"]
+  }
+  </script>
   <style>
     :root {
       --goud: #c9a84c;
@@ -283,6 +328,8 @@
       color: var(--goud); font-size: 1rem;
     }
     footer p { color: #444; font-size: 0.75rem; }
+    footer p a { color: #666; text-decoration: none; transition: color 0.3s; }
+    footer p a:hover { color: var(--goud); }
 
     /* FADE IN */
     .fade { opacity: 0; transform: translateY(24px); transition: opacity 0.7s ease, transform 0.7s ease; }
@@ -297,6 +344,7 @@
       .nav-links { display: none; }
       .portfolio-grid { grid-template-columns: 1fr 1fr; }
       .portfolio-grid .item-groot { grid-column: span 2; }
+      footer { flex-direction: column; gap: 12px; text-align: center; }
     }
   </style>
 </head>
@@ -317,9 +365,9 @@
   <div class="hero-bg"></div>
   <div class="hero-overlay"></div>
   <div class="hero-content">
-    <span class="hero-tag">Klusspecialist · Zuid-Holland</span>
+    <span class="hero-tag">Klusbedrijf · Noordwijk</span>
     <h1>Vakmanschap<br><em>van Duijn</em></h1>
-    <p>Badkamers, toiletten en klussen in en rondom het huis. Kwaliteit die u ziet en voelt.</p>
+    <p>Badkamers, toiletten en klussen in en rondom het huis — in Noordwijk en de hele Bollenstreek. Kwaliteit die u ziet en voelt.</p>
     <div class="hero-btns">
       <a href="#portfolio" class="btn-primary">Bekijk ons werk</a>
       <a href="#contact" class="btn-outline">Neem contact op</a>
@@ -372,39 +420,39 @@
   <div class="portfolio-grid fade" id="portfolio-grid">
     <!-- Vaste foto's als fallback + dynamische projecten -->
     <div class="portfolio-item item-groot">
-      <img src="/uploads/foto1.jpg" alt="Project 1" loading="lazy">
+      <img src="/uploads/foto1.jpg" alt="Badkamerrenovatie door De Klusspecialist van Duijn in Noordwijk" loading="lazy">
       <div class="portfolio-hover"><span>Badkamerrenovatie</span></div>
     </div>
     <div class="portfolio-item">
-      <img src="/uploads/foto3.jpg" alt="Project 3" loading="lazy">
+      <img src="/uploads/foto3.jpg" alt="Tegelwerk in een badkamer, uitgevoerd door klusbedrijf van Duijn" loading="lazy">
       <div class="portfolio-hover"><span>Tegelwerk</span></div>
     </div>
     <div class="portfolio-item">
-      <img src="/uploads/foto4.jpg" alt="Project 4" loading="lazy">
+      <img src="/uploads/foto4.jpg" alt="Strakke afwerking na een verbouwing" loading="lazy">
       <div class="portfolio-hover"><span>Afwerking</span></div>
     </div>
     <div class="portfolio-item">
-      <img src="/uploads/foto5.jpg" alt="Project 5" loading="lazy">
+      <img src="/uploads/foto5.jpg" alt="Geplaatst sanitair in een gerenoveerde badkamer" loading="lazy">
       <div class="portfolio-hover"><span>Sanitair</span></div>
     </div>
     <div class="portfolio-item">
-      <img src="/uploads/foto6.jpg" alt="Project 6" loading="lazy">
+      <img src="/uploads/foto6.jpg" alt="Renovatieproject in de Bollenstreek" loading="lazy">
       <div class="portfolio-hover"><span>Renovatie</span></div>
     </div>
     <div class="portfolio-item">
-      <img src="/uploads/foto7.jpg" alt="Project 7" loading="lazy">
+      <img src="/uploads/foto7.jpg" alt="Afgewerkt interieur na een klus van Piet van Duijn" loading="lazy">
       <div class="portfolio-hover"><span>Interieur</span></div>
     </div>
     <div class="portfolio-item">
-      <img src="/uploads/foto8.jpg" alt="Project 8" loading="lazy">
+      <img src="/uploads/foto8.jpg" alt="Wandtegels vakkundig gelegd" loading="lazy">
       <div class="portfolio-hover"><span>Tegelwerk</span></div>
     </div>
     <div class="portfolio-item">
-      <img src="/uploads/foto9.jpg" alt="Project 9" loading="lazy">
+      <img src="/uploads/foto9.jpg" alt="Detail van de afwerking van een badkamer" loading="lazy">
       <div class="portfolio-hover"><span>Afwerking</span></div>
     </div>
     <div class="portfolio-item">
-      <img src="/uploads/foto11.jpg" alt="Project 11" loading="lazy">
+      <img src="/uploads/foto11.jpg" alt="Complete renovatie van een woning in Noordwijk" loading="lazy">
       <div class="portfolio-hover"><span>Renovatie</span></div>
     </div>
   </div>
@@ -420,7 +468,7 @@
     <h2 class="section-title">Piet van Duijn</h2>
     <div class="section-divider"></div>
     <p>Met meer dan 15 jaar ervaring in de klussector weet ik wat kwaliteit betekent. Ik werk eerlijk, netjes en punctueel — en kom altijd mijn afspraken na.</p>
-    <p>Of het nu gaat om een kleine reparatie of een complete badkamerrenovatie, u kunt rekenen op vakmanschap en persoonlijke service in heel Zuid-Holland.</p>
+    <p>Vanuit Noordwijk werk ik in de hele Bollenstreek: Noordwijkerhout, Katwijk, Lisse, Sassenheim, Voorhout, Hillegom en Leiden. Of het nu gaat om een kleine reparatie of een complete badkamerrenovatie, u kunt rekenen op vakmanschap en persoonlijke service.</p>
     <div class="over-feiten">
       <div>
         <div class="feit-nr">15+</div>
@@ -442,7 +490,7 @@
       </div>
       <div class="contact-rij">
         <svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
-        <span>Zuid-Holland</span>
+        <span>De Mook 6, 2203 ZD Noordwijk</span>
       </div>
     </div>
   </div>
@@ -473,7 +521,7 @@
 
 <footer>
   <div class="footer-logo">De Klusspecialist van Duijn</div>
-  <p>© 2025 · Zuid-Holland</p>
+  <p>© 2026 · Klusbedrijf in Noordwijk, Zuid-Holland · De Mook 6, 2203 ZD Noordwijk · <a href="tel:0624262413">06 24 26 24 13</a></p>
 </footer>
 
 <script>
