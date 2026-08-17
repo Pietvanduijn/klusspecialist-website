@@ -278,13 +278,20 @@ footer p a { color: #666; text-decoration: none; transition: color 0.3s; }
 footer p a:hover { color: var(--goud); }
 
 /* Sociale profielen in de voettekst */
-.sociaal { display: flex; gap: 1.1rem; align-items: center; }
+.sociaal { display: flex; gap: 0.85rem; align-items: center; }
 .sociaal a {
-  color: #555; display: block; line-height: 0;
-  transition: color 0.3s ease, transform 0.3s ease;
+  color: var(--goud-licht);
+  width: 40px; height: 40px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  border: 1px solid rgba(201,168,76,0.35);
+  background: rgba(201,168,76,0.06);
+  transition: color 0.3s ease, background 0.3s ease, border-color 0.3s ease, transform 0.3s ease;
 }
-.sociaal a:hover { color: var(--goud); transform: translateY(-2px); }
-.sociaal svg { width: 19px; height: 19px; display: block; }
+.sociaal a:hover {
+  color: var(--donker); background: var(--goud);
+  border-color: var(--goud); transform: translateY(-2px);
+}
+.sociaal svg { width: 20px; height: 20px; display: block; }
 
 /* Beoordelingen bij Over ons */
 .reviews {
