@@ -277,6 +277,29 @@ footer p { color: #444; font-size: 0.75rem; }
 footer p a { color: #666; text-decoration: none; transition: color 0.3s; }
 footer p a:hover { color: var(--goud); }
 
+/* Sociale profielen in de voettekst */
+.sociaal { display: flex; gap: 1.1rem; align-items: center; }
+.sociaal a {
+  color: #555; display: block; line-height: 0;
+  transition: color 0.3s ease, transform 0.3s ease;
+}
+.sociaal a:hover { color: var(--goud); transform: translateY(-2px); }
+.sociaal svg { width: 19px; height: 19px; display: block; }
+
+/* Beoordelingen bij Over ons */
+.reviews {
+  display: inline-flex; align-items: center; gap: 0.6rem;
+  /* De ouder is een flex-kolom; zonder dit rekt het kadertje op tot volle breedte */
+  align-self: flex-start;
+  margin-bottom: 1.6rem; text-decoration: none;
+  color: var(--grijs); font-size: 0.84rem;
+  border: 1px solid rgba(201,168,76,0.25); border-radius: 3px;
+  padding: 0.5rem 0.9rem;
+  transition: border-color 0.3s ease, color 0.3s ease;
+}
+a.reviews:hover { border-color: var(--goud); color: var(--wit); }
+.reviews .sterren { color: var(--goud); letter-spacing: 0.08em; font-size: 0.9rem; }
+
 /* FADE IN */
 .fade { opacity: 0; transform: translateY(24px); transition: opacity 0.7s ease, transform 0.7s ease; }
 .fade.in { opacity: 1; transform: none; }

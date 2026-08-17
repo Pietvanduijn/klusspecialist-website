@@ -127,6 +127,18 @@
         <div class="feit-label"><%= i.feit2_label %></div>
       </div>
     </div>
+    <% if (i.reviews_tekst && i.werkspot_url) { %>
+    <a class="reviews" href="<%= i.werkspot_url %>" target="_blank" rel="noopener">
+      <span class="sterren" aria-hidden="true">★★★★★</span>
+      <span><%= i.reviews_tekst %></span>
+    </a>
+    <% } else if (i.reviews_tekst) { %>
+    <div class="reviews">
+      <span class="sterren" aria-hidden="true">★★★★★</span>
+      <span><%= i.reviews_tekst %></span>
+    </div>
+    <% } %>
+
     <div class="contact-rijen">
       <div class="contact-rij">
         <svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81a19.79 19.79 0 01-3.07-8.7A2 2 0 012 .18h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 14.92z"/></svg>
@@ -169,6 +181,31 @@
 
 <footer>
   <div class="footer-logo"><%= i.bedrijfsnaam %></div>
+
+  <% if (i.facebook_url || i.instagram_url || i.werkspot_url) { %>
+  <div class="sociaal">
+    <% if (i.facebook_url) { %>
+    <a href="<%= i.facebook_url %>" target="_blank" rel="noopener" title="Facebook" aria-label="Facebook">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M22 12.06C22 6.5 17.52 2 12 2S2 6.5 2 12.06c0 5.02 3.66 9.18 8.44 9.94v-7.03H7.9v-2.91h2.54V9.85c0-2.52 1.49-3.91 3.77-3.91 1.09 0 2.24.2 2.24.2v2.46h-1.26c-1.24 0-1.63.78-1.63 1.57v1.89h2.78l-.45 2.91h-2.33V22c4.78-.76 8.44-4.92 8.44-9.94z"/></svg>
+    </a>
+    <% } %>
+    <% if (i.instagram_url) { %>
+    <a href="<%= i.instagram_url %>" target="_blank" rel="noopener" title="Instagram" aria-label="Instagram">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+        <rect x="2.5" y="2.5" width="19" height="19" rx="5.5"/>
+        <circle cx="12" cy="12" r="4.2"/>
+        <circle cx="17.6" cy="6.4" r="1.1" fill="currentColor" stroke="none"/>
+      </svg>
+    </a>
+    <% } %>
+    <% if (i.werkspot_url) { %>
+    <a href="<%= i.werkspot_url %>" target="_blank" rel="noopener" title="Onze beoordelingen op Werkspot" aria-label="Beoordelingen op Werkspot">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.5l2.9 5.9 6.6.95-4.75 4.63 1.12 6.52L12 17.42 6.13 20.5l1.12-6.52L2.5 9.35l6.6-.95z"/></svg>
+    </a>
+    <% } %>
+  </div>
+  <% } %>
+
   <p><%= i.footer_tekst %> · <%= adres %> · <a href="tel:<%= telLink %>"><%= i.telefoon %></a></p>
 </footer>
 
