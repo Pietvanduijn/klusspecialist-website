@@ -167,9 +167,10 @@ app.get('/', (req, res) => {
     knowsAbout: [1, 2, 3, 4].map(n => i[`dienst${n}_titel`]).filter(Boolean),
   };
 
-  // Koppelt Facebook en Werkspot aan dit bedrijf, zodat Google begrijpt dat het
+  // Koppelt de profielen elders aan dit bedrijf, zodat Google begrijpt dat het
   // om dezelfde onderneming gaat. Alleen meesturen als ze ingevuld zijn.
-  const sameAs = [i.facebook_url, i.werkspot_url].map(s => (s || '').trim()).filter(Boolean);
+  const sameAs = [i.facebook_url, i.werkspot_url, i.instagram_url]
+    .map(s => (s || '').trim()).filter(Boolean);
   if (sameAs.length) gegevens.sameAs = sameAs;
 
   res.render('index', {
