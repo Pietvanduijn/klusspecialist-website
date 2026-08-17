@@ -8,7 +8,7 @@ const sharp = require('sharp');
 const bcrypt = require('bcryptjs');
 const cookieSession = require('cookie-session');
 
-const { q, inhoud, inhoudPerGroep, UPLOADS_DIR, DATA_DIR } = require('./lib/db');
+const { q, inhoud, inhoudPerGroep, UPLOADS_DIR, DATA_DIR, BRON_UPLOADS } = require('./lib/db');
 
 const app = express();
 const PORT = process.env.PORT || 8080;
@@ -94,13 +94,39 @@ const upload = multer({
  * ongewijzigd doorzetten maakt de site traag en kost Piet bezoekers.
  */
 async function bewaarFoto(buffer) {
-  const naam = `foto-${Date.now()}-${Math.round(Math.random() * 1e6)}.jpg`;
+  const naam = `foto-${Date.now()}-${Math.round(Math.random() * 1e6)}.webp`;
   await sharp(buffer)
     .rotate()                                   // respecteert de stand van de telefoon
-    .resize({ width: 1800, height: 1800, fit: 'inside', withoutEnlargement: true })
-    .jpeg({ quality: 82, progressive: true })
+    .resize({ width: 1400, height: 1400, fit: 'inside', withoutEnlargement: true })
+    .webp({ quality: 80 })                      // ruim 70% kleiner dan JPEG
     .toFile(path.join(UPLOADS_DIR, naam));
   return '/uploads/' + naam;
+}
+
+/**
+ * Zet de JPEG-startfoto's uit de repo eenmalig om naar WebP op het volume.
+ * Draait bij elke start, maar slaat over wat er al staat — dus alleen de eerste
+ * keer kost het tijd. Zo hoeven er geen afbeeldingen in GitHub bijgehouden te
+ * worden en is de site toch 70% lichter.
+ */
+async function startfotosKlaarzetten() {
+  if (!fs.existsSync(BRON_UPLOADS)) return;
+  let gemaakt = 0;
+  for (const naam of fs.readdirSync(BRON_UPLOADS)) {
+    if (!/\.jpe?g$/i.test(naam)) continue;
+    const doel = path.join(UPLOADS_DIR, naam.replace(/\.jpe?g$/i, '.webp'));
+    if (fs.existsSync(doel)) continue;
+    try {
+      await sharp(path.join(BRON_UPLOADS, naam))
+        .resize({ width: 1400, height: 1400, fit: 'inside', withoutEnlargement: true })
+        .webp({ quality: 80 })
+        .toFile(doel);
+      gemaakt++;
+    } catch (err) {
+      console.error('Omzetten mislukt voor', naam, err.message);
+    }
+  }
+  if (gemaakt) console.log(`🖼️  ${gemaakt} startfoto's omgezet naar WebP`);
 }
 
 /** Verwijdert een bestand, maar alleen binnen de uploadmap. */
@@ -141,6 +167,11 @@ app.get('/', (req, res) => {
     knowsAbout: [1, 2, 3, 4].map(n => i[`dienst${n}_titel`]).filter(Boolean),
   };
 
+  // Koppelt Facebook en Werkspot aan dit bedrijf, zodat Google begrijpt dat het
+  // om dezelfde onderneming gaat. Alleen meesturen als ze ingevuld zijn.
+  const sameAs = [i.facebook_url, i.werkspot_url].map(s => (s || '').trim()).filter(Boolean);
+  if (sameAs.length) gegevens.sameAs = sameAs;
+
   res.render('index', {
     i,
     projecten: q.projecten.all(),
@@ -150,6 +181,28 @@ app.get('/', (req, res) => {
     // Losse < afvangen zodat een tekst nooit het script kan afbreken
     jsonld: JSON.stringify(gegevens, null, 2).replace(/</g, '\\u003c'),
   });
+});
+
+// Wegwijzers voor zoekmachines. Het beheerscherm blijft er bewust buiten.
+app.get('/robots.txt', (req, res) => {
+  res.type('text/plain').send(
+    `User-agent: *\nDisallow: /admin\n\nSitemap: ${SITE_URL}/sitemap.xml\n`
+  );
+});
+
+app.get('/sitemap.xml', (req, res) => {
+  const gewijzigd = new Date().toISOString().slice(0, 10);
+  res.type('application/xml').send(
+    `<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>${SITE_URL}/</loc>
+    <lastmod>${gewijzigd}</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>1.0</priority>
+  </url>
+</urlset>
+`);
 });
 
 // Contactformulier
@@ -369,8 +422,14 @@ app.use((err, req, res, next) => {
   res.status(err.status || err.statusCode || 500).json({ error: bericht });
 });
 
-app.listen(PORT, () => {
-  console.log(`✅ Server draait op http://localhost:${PORT}`);
-  console.log(`📁 Gegevens en foto's: ${DATA_DIR}`);
-  console.log(`🔐 Beheer: http://localhost:${PORT}/admin`);
-});
+// Eerst de startfoto's omzetten, dan pas bezoekers toelaten — anders zou de
+// eerste bezoeker naar ontbrekende afbeeldingen kijken.
+startfotosKlaarzetten()
+  .catch(err => console.error('Startfoto\'s omzetten mislukt:', err))
+  .finally(() => {
+    app.listen(PORT, () => {
+      console.log(`✅ Server draait op http://localhost:${PORT}`);
+      console.log(`📁 Gegevens en foto's: ${DATA_DIR}`);
+      console.log(`🔐 Beheer: http://localhost:${PORT}/admin`);
+    });
+  });

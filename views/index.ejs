@@ -15,7 +15,13 @@
   <meta property="og:image" content="<%= siteUrl %><%= i.hero_foto %>">
   <meta property="og:locale" content="nl_NL">
 
+  <!-- Alvast verbinding maken met Google Fonts, scheelt wachttijd -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+  <!-- De grote foto bovenaan bepaalt hoe snel de pagina "klaar" oogt -->
+  <link rel="preload" as="image" href="<%= i.hero_foto %>" fetchpriority="high">
 
   <!-- Gestructureerde gegevens: vertelt Google dat dit een lokaal bedrijf is -->
   <script type="application/ld+json"><%- jsonld %></script>
