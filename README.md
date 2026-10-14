@@ -1,144 +1,84 @@
-# De Klusspecialist van Duijn - Professionele Website
+ge# De Klusspecialist van Duijn
 
-Dit is een volledige **full-stack website** met backend, database, en admin panel.
+Website van het klusbedrijf van Piet van Duijn in Noordwijk.
 
-## Project Structuur
+**Live:** https://www.klusspecialistvanduijn.nl
+
+Node.js met Express. De teksten en foto's staan in een SQLite-database en zijn
+aan te passen via een beheerscherm, zonder dat er code gewijzigd hoeft te worden.
+
+## Opzet
 
 ```
-klusspecialist-website/
-├── server.js              # Express backend server
-├── package.json           # Node.js dependencies
-├── klusspecialist.db      # SQLite database (wordt automatisch aangemaakt)
-├── uploads/               # Mappen voor project foto's
-├── client/
-│   └── App.jsx           # React frontend component
-└── public/               # Static files (index.html, etc)
+server.js            Express-server, routes en het beheerscherm
+lib/db.js            Database, standaardteksten, omzetting foto's naar WebP
+views/index.ejs      De website als sjabloon
+views/admin/         De schermen van het beheer
+public/              styles.css en admin.css
+uploads/             Startfoto's. MOET BLIJVEN STAAN — lib/db.js haalt ze hieruit
 ```
 
-## Setup (Lokale Development)
+De pagina wordt door de server opgebouwd, niet door JavaScript in de browser.
+Dat is bewust: zo leest Google de teksten gewoon mee.
 
-### 1. Node.js installeren
-Download van https://nodejs.org (v16 of hoger)
+## Beheerscherm
 
-### 2. Project Dependencies installeren
+Op `/admin`. Inloggen met gebruikersnaam `piet` en het wachtwoord dat in Railway
+onder `ADMIN_WACHTWOORD` staat. Het wachtwoord is daarna te wijzigen in het
+scherm zelf.
+
+Wat erin kan: portfoliofoto's toevoegen, bijschriften en volgorde aanpassen,
+alle teksten van de site wijzigen, en de binnengekomen contactberichten lezen.
+
+Geüploade foto's worden automatisch gedraaid, verkleind naar maximaal 1400
+pixels en omgezet naar WebP. Een telefoonfoto van 2,7 MB wordt zo ongeveer
+50 KB.
+
+## Waar de gegevens staan
+
+Railway wist bij elke nieuwe versie de hele schijf. De database en de geüploade
+foto's staan daarom **niet** in de projectmap maar in `DATA_DIR`, dat in Railway
+naar een volume wijst (een vaste schijf die een update overleeft). Lokaal is dat
+de map `./data`.
+
+Die map hoort niet in GitHub en staat in `.gitignore`.
+
+## Instellingen
+
+In Railway onder Variables, lokaal in een `.env`. Zie `.env.example`.
+
+| Naam | Waarvoor |
+|---|---|
+| `DATA_DIR` | Waar de database en foto's staan. In Railway: `/data` |
+| `ADMIN_WACHTWOORD` | Startwachtwoord. Alleen gebruikt als er nog geen beheerder is |
+| `SESSION_SECRET` | Ondertekent het inlogcookie |
+| `SITE_URL` | Volledig adres van de site, zonder schuine streep aan het eind |
+| `NODE_ENV` | `production` zet het inlogcookie op alleen-https |
+| `RESEND_API_KEY` | Voor het versturen van de contactformulieren |
+
+## Lokaal draaien
+
 ```bash
-cd klusspecialist-website
 npm install
+npm run dev
 ```
 
-### 3. Server starten
-```bash
-npm start
-```
+Site op `http://localhost:8080`, beheer op `http://localhost:8080/admin`.
 
-Je ziet dan:
-```
-✅ Server running at http://localhost:5000
-💾 Database: ./klusspecialist.db
-```
+## Hosting
 
-### 4. Frontend openen
-Ga naar http://localhost:5000 in je browser
+Railway, project `spirited-eagerness`, regio EU West (Amsterdam). Elke commit op
+`main` gaat automatisch live.
 
-## Admin inloggen
+Het domein staat bij TransIP. Alles komt uit op `https://www.` — het kale domein
+stuurt door.
 
-- **URL**: http://localhost:5000 → Klik "Admin"
-- **Wachtwoord**: `piet123`
-- **Functies**:
-  - Projecten toevoegen/verwijderen/foto's uploaden
-  - Bedrijfsgegevens bewerken (naam, telefoon, email, etc.)
-  - Berichten van contactformulier bekijken
+## Let op bij wijzigen
 
-## Database
+De standaardteksten in `lib/db.js` worden alleen gebruikt bij een **lege**
+database. Bestaat de database al, dan blijven de bestaande waarden staan. Dat is
+expres: anders zou elke update de wijzigingen van Piet wissen.
 
-De app gebruikt **SQLite** - een ingebouwde database die geen extra setup nodig heeft.
-
-Database file: `klusspecialist.db` (automatisch aangemaakt)
-
-### Database Tabellen:
-- **company_info** - Bedrijfsgegevens
-- **projects** - Portfolio projecten
-- **messages** - Contact berichten
-
-## API Endpoints
-
-### Company Info
-- `GET /api/company` - Bedrijfsgegevens ophalen
-- `POST /api/company` - Bedrijfsgegevens bijwerken
-
-### Projects
-- `GET /api/projects` - Alle projecten
-- `GET /api/projects/:id` - Specifiek project
-- `POST /api/projects` - Nieuw project toevoegen (met foto)
-- `PUT /api/projects/:id` - Project updaten
-- `DELETE /api/projects/:id` - Project verwijderen
-
-### Contact
-- `POST /api/contact` - Contact formulier versturen
-- `GET /api/messages` - Alle berichten (admin only)
-
-## Foto's uploaden
-
-In Admin Panel:
-1. Ga naar "Projecten" tab
-2. Vul "Titel", "Categorie" in
-3. Klik "Kies bestand" om foto te selecteren
-4. Klik "Project toevoegen"
-
-Foto's worden opgeslagen in `/uploads` folder.
-
-## Deployment naar Internet
-
-### Optie 1: Railway (Aanbevolen - makkelijk)
-1. Ga naar https://railway.app
-2. Login met GitHub
-3. Klik "New Project" → "Deploy from GitHub"
-4. Selecteer dit project
-5. Database en server draaien automatisch
-
-### Optie 2: Render
-1. Ga naar https://render.com
-2. Klik "New +" → "Web Service"
-3. Verbind je GitHub repo
-4. Build command: `npm install`
-5. Start command: `npm start`
-
-### Optie 3: Heroku (Legacy)
-```bash
-heroku login
-heroku create klusspecialist-vanduijn
-git push heroku main
-```
-
-## Wachtwoord veranderen
-
-Bewerk `server.js` en zoek:
-```javascript
-const ADMIN_PASSWORD = 'piet123';
-```
-
-Verander naar je eigen wachtwoord.
-
-## Onderhoud
-
-### Backups
-Database file `klusspecialist.db` bevat alle data. Maak regelmatig backups.
-
-### Logs
-Server logs verschijnen in terminal wanneer je `npm start` draait.
-
-## Support
-
-Voor problemen:
-1. Check of Node.js installeerd is: `node --version`
-2. Check of port 5000 vrij is
-3. Zorg dat alle dependencies installeren: `npm install`
-
-## Volgende stappen
-
-1. **Domein naam**: Koop een domein (bijv. klusspecialistvanduijn.nl)
-2. **SSL/HTTPS**: Configure op je hosting (meestal automatisch)
-3. **Backups**: Setup automatische backups
-4. **Email notificaties**: Voeg SMTP toe voor contact berichten
-
-Veel succes! 🚀
+Wil je een standaardwaarde alsnog doorvoeren in een bestaande database, dan is
+daar een aparte omzetting voor nodig — zie de twee `UPDATE`-regels in
+`lib/db.js` die de startfoto's van JPEG naar WebP hebben gezet.
