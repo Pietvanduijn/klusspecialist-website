@@ -1,4 +1,4 @@
-ge# De Klusspecialist van Duijn
+# De Klusspecialist van Duijn
 
 Website van het klusbedrijf van Piet van Duijn in Noordwijk.
 
