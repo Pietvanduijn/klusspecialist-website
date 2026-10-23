@@ -213,22 +213,46 @@ app.post('/api/contact', async (req, res) => {
     return res.status(400).json({ error: 'Alle velden zijn verplicht' });
   }
 
+  const i = inhoud();
+
+  // Eerst opslaan. Lukt dat niet, dan is het bericht echt weg en moet de
+  // bezoeker dat weten — dan heeft doorsturen naar de mail geen zin meer.
+  let berichtId = null;
   try {
-    q.berichtToevoegen.run(String(name).slice(0, 200), String(email).slice(0, 200), String(message).slice(0, 5000));
+    const r = q.berichtToevoegen.run(
+      String(name).slice(0, 200),
+      String(email).slice(0, 200),
+      String(message).slice(0, 5000)
+    );
+    berichtId = r.lastInsertRowid;
   } catch (err) {
     console.error('Opslaan bericht mislukt:', err);
+    return res.status(500).json({
+      success: false,
+      message: `Er ging iets mis. Bel ons op ${i.telefoon} of mail naar ${i.email}.`,
+    });
   }
 
+  // Dan versturen. De uitkomst wordt bij het bericht vastgelegd, zodat een
+  // mislukte verzending zichtbaar is in het beheerscherm in plaats van alleen
+  // in de serverlogboeken.
   const apiKey = process.env.RESEND_API_KEY;
-  if (apiKey) {
+  let gelukt = false;
+  let fout = null;
+
+  if (!apiKey) {
+    fout = 'Geen RESEND_API_KEY ingesteld';
+    console.error('E-mail niet verstuurd:', fout);
+  } else {
     const veilig = s => String(s).replace(/[<>&]/g, c => ({ '<': '&lt;', '>': '&gt;', '&': '&amp;' }[c]));
+    const ontvangers = [i.email, (i.kopie_email || '').trim()].filter(Boolean);
     try {
       const response = await fetch('https://api.resend.com/emails', {
         method: 'POST',
         headers: { Authorization: `Bearer ${apiKey}`, 'Content-Type': 'application/json' },
         body: JSON.stringify({
           from: 'website@klusspecialistvanduijn.nl',
-          to: inhoud().email,
+          to: ontvangers,
           reply_to: String(email),
           subject: `Nieuw bericht van ${veilig(name)} via de website`,
           html: `<h2>Nieuw contactbericht</h2>
@@ -238,13 +262,33 @@ app.post('/api/contact', async (req, res) => {
             <p>${veilig(message).replace(/\n/g, '<br>')}</p>`,
         }),
       });
-      if (!response.ok) console.error('Resend fout:', await response.text());
+      if (response.ok) {
+        gelukt = true;
+      } else {
+        fout = 'Resend gaf ' + response.status + ': ' + (await response.text()).slice(0, 300);
+        console.error(fout);
+      }
     } catch (err) {
-      console.error('E-mail fout:', err);
+      fout = 'Verbinding met Resend mislukt: ' + err.message;
+      console.error(fout);
     }
   }
 
-  res.json({ success: true, message: 'Bericht ontvangen' });
+  try {
+    q.berichtVerzending.run(gelukt ? 1 : 0, fout, berichtId);
+  } catch (err) {
+    console.error('Verzendstatus opslaan mislukt:', err);
+  }
+
+  // De bezoeker krijgt te horen wat er werkelijk gebeurd is. Zonder dit zou
+  // iemand denken dat zijn offerteaanvraag onderweg is terwijl niemand hem ziet.
+  if (gelukt) {
+    return res.json({ success: true, message: 'Bedankt! Uw bericht is verzonden.' });
+  }
+  res.json({
+    success: false,
+    message: `Uw bericht is opgeslagen, maar het versturen lukte niet. Bel ons op ${i.telefoon} om er zeker van te zijn dat we u bereiken.`,
+  });
 });
 
 // ------------------------------------------------------------ inloggen

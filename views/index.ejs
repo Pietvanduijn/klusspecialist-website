@@ -233,13 +233,20 @@
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ name: naam, email, message: bericht })
       });
-      if (res.ok) {
-        melding.textContent = 'Bedankt! Uw bericht is verzonden.';
+      const data = await res.json().catch(function () { return {}; });
+
+      // De server vertelt of de mail echt verstuurd is. Lukte dat niet, dan
+      // staat het bericht wel opgeslagen maar moet de bezoeker ons bellen.
+      if (data.success) {
+        melding.textContent = data.message || 'Bedankt! Uw bericht is verzonden.';
         melding.className = 'form-melding succes';
         document.getElementById('naam').value = '';
         document.getElementById('email').value = '';
         document.getElementById('bericht').value = '';
-      } else throw new Error();
+      } else {
+        melding.textContent = data.message || 'Er ging iets mis. Probeer het opnieuw of bel direct.';
+        melding.className = 'form-melding fout';
+      }
     } catch {
       melding.textContent = 'Er ging iets mis. Probeer het opnieuw of bel direct.';
       melding.className = 'form-melding fout';

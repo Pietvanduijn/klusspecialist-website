@@ -132,7 +132,12 @@ input[type=file]::file-selector-button {
 }
 .knop:hover { background: var(--goud-licht); }
 .knop.klein { padding: 0.4rem 0.9rem; font-size: 0.78rem; }
-.knop.leeg {
+.knop.niet-verstuurd {
+  color: #d88479; font-size: 0.72rem; margin-top: 0.3rem;
+  border: 1px solid rgba(192,86,75,0.4); border-radius: 3px;
+  padding: 0.1rem 0.4rem; display: inline-block;
+}
+.leeg {
   background: none; border: 1px solid rgba(201, 168, 76, 0.35); color: var(--goud);
 }
 .knop.leeg:hover { background: rgba(201, 168, 76, 0.1); }
