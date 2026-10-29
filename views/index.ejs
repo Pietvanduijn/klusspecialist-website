@@ -98,7 +98,7 @@
   </div>
   <div class="portfolio-grid fade" id="portfolio-grid">
     <% projecten.forEach(function (p, n) { %>
-    <div class="portfolio-item<%= n === 0 ? ' item-groot' : '' %>">
+    <div class="portfolio-item">
       <img src="<%= p.bestand %>" alt="<%= p.alt || p.titel %>" loading="lazy">
       <div class="portfolio-hover"><span><%= p.titel %></span></div>
     </div>
